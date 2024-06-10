@@ -14,6 +14,12 @@
             @foreach($project->type->projects as $related_project)
             <p><a href="{{ route('admin.projects.show', $related_project)}}">{{$related_project->title}}</a></p>
             @endforeach
+            <ul class="d-flex gap-2 list-unstyled">
+        <li>Technologies: </li>
+        @foreach($project->technologies as $tecnology)            
+            <li>{{$tecnology->name}}</li>
+        @endforeach
+    </ul>
         <a class="btn btn-secondary" href="{{ route('admin.projects.index') }}">Back</a>
         <a href="{{ route('admin.projects.edit', $project)}}" class="btn btn-primary">Edit</a>
     </div>

@@ -12,7 +12,7 @@ class StoreProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class StoreProjectRequest extends FormRequest
     {
         return [
             'title'=>'required|max:255',
-            'slug' => ['required', 'max:255', Rule::unique('projects')->ignore($this->project)],
+            'technologies'=>'exists:technologies,id',
             'content'=>'nullable|max:255',
             'type_id'=>'required',
             

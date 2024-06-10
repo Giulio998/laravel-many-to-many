@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Type;
 use App\Models\Project;
+use App\Models\Technology;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Requests\UpdateTypeRequest;
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 
 class ProjectController extends Controller
 {
@@ -27,20 +29,15 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types','technologies'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        $request->validate([
-            'title'=>'required|max:150|string',
-            'content'=>'nullable|string',
-            'type_id'=>'required'
-        ]);
-
         $form_data= $request->all();
 
         $base_slug = Str::slug($form_data['title']);
@@ -48,8 +45,8 @@ class ProjectController extends Controller
         $n = 0;
 
         do {
-            // SELECT * FROM `posts` WHERE `slug` = ?
-            $find = Project::where('slug', $slug)->first(); 
+            $find = Project::where('slug', $slug)->first();
+
             if ($find !== null) {
                 $n++;
                 $slug = $base_slug . '-' . $n;
@@ -60,6 +57,10 @@ class ProjectController extends Controller
 
 
         $new_project = Project::create($form_data);
+
+        if ($request->has('technologies')) {
+            $new_project->technologies()->sync($request->technologies);
+        }
         return to_route('admin.projects.show', $new_project);
     }
 
@@ -79,13 +80,14 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'types','technologies'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTypeRequest $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
         $form_data = $request->all();
         $base_slug = Str::slug($form_data['title']);
@@ -93,8 +95,8 @@ class ProjectController extends Controller
         $n = 0;
 
         do {
-            // SELECT * FROM `posts` WHERE `slug` = ?
-            $find = Project::where('slug', $slug)->first(); 
+            $find = Project::where('slug', $slug)->first();
+
             if ($find !== null) {
                 $n++;
                 $slug = $base_slug . '-' . $n;
@@ -106,13 +108,17 @@ class ProjectController extends Controller
         return to_route('admin.projects.show', $project); 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Project $project)
     {
+        $project->technologies()->detach();
         $project->delete();
 
         return to_route('admin.projects.index');
     }
 }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+  
+

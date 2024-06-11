@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateTypeRequest extends FormRequest
+
+class StoreTechnologyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class UpdateTypeRequest extends FormRequest
     {
         return [
             "name"=>'required|max:255',
-            "content"=>'nullable'
+            
         ];
     }
 }

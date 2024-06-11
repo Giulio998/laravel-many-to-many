@@ -11,19 +11,32 @@
         <p><strong>Description:</strong> {{$project->content}}</p>
         <p><strong>Type:</strong> {{$project->type->name ?? 'None'}}</p>
         <h3>Related Projects:</h3>
-            @foreach($project->type->projects as $related_project)
+        @foreach($project->type->projects as $related_project)
             <p><a href="{{ route('admin.projects.show', $related_project)}}">{{$related_project->title}}</a></p>
-            @endforeach
-            <ul class="d-flex gap-2 list-unstyled">
-        <li>Technologies: </li>
-        @foreach($project->technologies as $tecnology)            
-            <li>{{$tecnology->name}}</li>
         @endforeach
-    </ul>
-        <a class="btn btn-secondary" href="{{ route('admin.projects.index') }}">Back</a>
-        <a href="{{ route('admin.projects.edit', $project)}}" class="btn btn-primary">Edit</a>
+        <ul class="d-flex gap-2 list-unstyled">
+            <li>Technologies: </li>
+            @foreach($project->technologies as $tecnology)            
+                <li>{{$tecnology->name}}</li>
+            @endforeach
+        </ul>
+        <div class="d-flex justify-content-between">
+            <div>
+                <a class="btn btn-secondary" href="{{ route('admin.projects.index') }}">Back</a>
+                <a href="{{ route('admin.projects.edit', $project)}}" class="btn btn-primary">Edit</a>
+            </div>
+            <div>
+                <form action="{{ route('admin.projects.destroy', $project)}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+
     </div>
+
 </div>
-</div>
+
 
 @endsection

@@ -3,10 +3,10 @@
 @section('content')
 
 <section>
-    <div class="container d-flex justify-content-between">
-        <h1>Projects</h1>
+    <div class="container d-flex justify-content-between my-4">
+        <h1 >Projects</h1>
         <div class="d-flex align-items-end">
-            <a class="btn btn-info" href="{{ route('admin.projects.create') }}">Create new project</a>
+            <a class="btn btn-primary" href="{{ route('admin.projects.create') }}">Create new project</a>
         </div>
     </div>
 

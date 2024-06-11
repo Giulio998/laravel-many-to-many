@@ -49,15 +49,15 @@ class TypeController extends Controller
      */
     public function edit(Type $type)
     {
-        $types = Type::all();
-        return view('admin.types.edit', compact('types'));
+        
+        return view('admin.types.edit', compact('type'));
     }
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateTypeRequest $request, Type $type)
     {
-        $form_data = $request->all();
+        $form_data = $request->validated();
         $type->update($form_data);  
 
         return to_route('admin.types.show', $type); 
